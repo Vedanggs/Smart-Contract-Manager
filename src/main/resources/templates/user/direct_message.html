@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
+>
+  <head>
+    <title data-th-text="${loggedInUser.name}+' |  Direct Message'">
+      Direct Message Page
+    </title>
+  </head>
+  <body>
+    <div id="content">
+      <!-- sidebar -->
+
+      <!-- user is logged in : sidebar -->
+
+      <div th:if="${loggedInUser}">
+        <div data-th-replace="~{user/sidebar :: sidebar}"></div>
+      </div>
+
+      <div class="sm:pl-64 pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div class="p-6">
+          <!-- Header Section -->
+          <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">
+              <i class="fa-solid fa-message mr-2 text-blue-600"></i>Direct Message
+            </h1>
+            <p class="text-gray-600 dark:text-gray-300">
+              Send messages directly to your contacts
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Contacts List -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+              <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4">
+                <i class="fa-solid fa-address-book mr-2 text-green-600"></i>Your Contacts
+              </h2>
+              
+              <div th:if="${contacts != null and !contacts.isEmpty()}" class="space-y-3 max-h-96 overflow-y-auto">
+                <div th:each="contact : ${contacts}" 
+                     class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900 cursor-pointer transition-colors contact-item"
+                     th:data-contact-id="${contact.id}"
+                     th:data-contact-name="${contact.name}"
+                     th:data-contact-email="${contact.email}"
+                     onclick="selectContact(this)">
+                  <img th:src="${contact.picture != null ? contact.picture : 'https://ui-avatars.com/api/?name=' + contact.name + '&background=random'}" 
+                       class="w-12 h-12 rounded-full mr-3" 
+                       alt="Contact">
+                  <div class="flex-1">
+                    <p class="font-medium text-gray-800 dark:text-white" th:text="${contact.name}">Name</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${contact.email}">Email</p>
+                  </div>
+                  <i th:if="${contact.favorite}" class="fa-solid fa-star text-yellow-500"></i>
+                </div>
+              </div>
+              
+              <div th:if="${contacts == null or contacts.isEmpty()}" class="text-center py-8 text-gray-500 dark:text-gray-400">
+                <i class="fa-regular fa-address-book text-4xl mb-2"></i>
+                <p>No contacts available.</p>
+                <a href="/user/contacts/add" class="text-blue-600 hover:underline text-sm">Add a contact first</a>
+              </div>
+            </div>
+
+            <!-- Message Composition -->
+            <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+              <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4">
+                <i class="fa-solid fa-paper-plane mr-2 text-purple-600"></i>Compose Message
+              </h2>
+              
+              <form id="messageForm" onsubmit="sendMessage(event)">
+                <!-- Selected Contact Display -->
+                <div class="mb-4 p-4 bg-blue-50 dark:bg-blue-900 rounded-lg" id="selectedContactDisplay">
+                  <p class="text-sm text-gray-600 dark:text-gray-300 mb-1">Sending to:</p>
+                  <div class="flex items-center">
+                    <div id="selectedContactAvatar" class="w-10 h-10 rounded-full bg-gray-300 mr-3 flex items-center justify-center text-gray-600">
+                      <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div>
+                      <p id="selectedContactName" class="font-medium text-gray-800 dark:text-white">Select a contact from the list</p>
+                      <p id="selectedContactEmail" class="text-sm text-gray-500 dark:text-gray-400">-</p>
+                    </div>
+                  </div>
+                  <input type="hidden" id="selectedContactId" name="contactId">
+                </div>
+
+                <!-- Message Subject -->
+                <div class="mb-4">
+                  <label for="messageSubject" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subject</label>
+                  <input type="text" 
+                         id="messageSubject" 
+                         name="subject"
+                         class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                         placeholder="Enter message subject..."
+                         required>
+                </div>
+
+                <!-- Message Body -->
+                <div class="mb-4">
+                  <label for="messageBody" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Message</label>
+                  <textarea id="messageBody" 
+                            name="message"
+                            rows="6"
+                            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white resize-none"
+                            placeholder="Type your message here..."
+                            required></textarea>
+                </div>
+
+                <!-- Message Type -->
+                <div class="mb-4">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Message Type</label>
+                  <div class="flex space-x-4">
+                    <label class="flex items-center">
+                      <input type="radio" name="messageType" value="email" checked class="mr-2 text-blue-600">
+                      <span class="text-gray-700 dark:text-gray-300"><i class="fa-solid fa-envelope mr-1"></i>Email</span>
+                    </label>
+                    <label class="flex items-center">
+                      <input type="radio" name="messageType" value="sms" class="mr-2 text-blue-600">
+                      <span class="text-gray-700 dark:text-gray-300"><i class="fa-solid fa-sms mr-1"></i>SMS</span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex justify-between items-center">
+                  <button type="button" 
+                          onclick="clearForm()"
+                          class="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition-colors">
+                    <i class="fa-solid fa-eraser mr-1"></i>Clear
+                  </button>
+                  <button type="submit" 
+                          class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center">
+                    <i class="fa-solid fa-paper-plane mr-2"></i>Send Message
+                  </button>
+                </div>
+              </form>
+
+              <!-- Message History (Demo) -->
+              <div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-6">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+                  <i class="fa-solid fa-history mr-2 text-gray-500"></i>Recent Messages
+                </h3>
+                <div class="space-y-3">
+                  <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div class="flex justify-between items-start mb-2">
+                      <div class="flex items-center">
+                        <i class="fa-solid fa-envelope text-blue-500 mr-2"></i>
+                        <span class="font-medium text-gray-800 dark:text-white">Welcome Message</span>
+                      </div>
+                      <span class="text-xs text-gray-500 dark:text-gray-400">Just now</span>
+                    </div>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Your message center is ready! Select a contact and start messaging.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      console.log("Direct Message page loaded");
+      
+      // Function to select a contact
+      function selectContact(element) {
+        const contactId = element.getAttribute('data-contact-id');
+        const contactName = element.getAttribute('data-contact-name');
+        const contactEmail = element.getAttribute('data-contact-email');
+        const contactPicture = element.querySelector('img').src;
+        
+        // Update hidden input
+        document.getElementById('selectedContactId').value = contactId;
+        
+        // Update display
+        document.getElementById('selectedContactName').textContent = contactName;
+        document.getElementById('selectedContactEmail').textContent = contactEmail;
+        
+        // Update avatar
+        const avatarDiv = document.getElementById('selectedContactAvatar');
+        avatarDiv.innerHTML = `<img src="${contactPicture}" class="w-10 h-10 rounded-full">`;
+        
+        // Highlight selected contact
+        document.querySelectorAll('.contact-item').forEach(item => {
+          item.classList.remove('ring-2', 'ring-blue-500');
+        });
+        element.classList.add('ring-2', 'ring-blue-500');
+        
+        console.log('Selected contact:', contactName);
+      }
+      
+      // Function to send message
+      function sendMessage(event) {
+        event.preventDefault();
+        
+        const contactId = document.getElementById('selectedContactId').value;
+        const subject = document.getElementById('messageSubject').value;
+        const message = document.getElementById('messageBody').value;
+        const messageType = document.querySelector('input[name="messageType"]:checked').value;
+        
+        if (!contactId) {
+          alert('Please select a contact first!');
+          return;
+        }
+        
+        // Simulate sending message
+        console.log('Sending message:', { contactId, subject, message, messageType });
+        
+        // Show success message
+        alert(`Message sent successfully via ${messageType.toUpperCase()}!`);
+        
+        // Clear form
+        clearForm();
+      }
+      
+      // Function to clear form
+      function clearForm() {
+        document.getElementById('messageForm').reset();
+        document.getElementById('selectedContactId').value = '';
+        document.getElementById('selectedContactName').textContent = 'Select a contact from the list';
+        document.getElementById('selectedContactEmail').textContent = '-';
+        document.getElementById('selectedContactAvatar').innerHTML = '<i class="fa-solid fa-user"></i>';
+        
+        document.querySelectorAll('.contact-item').forEach(item => {
+          item.classList.remove('ring-2', 'ring-blue-500');
+        });
+      }
+    </script>
+  </body>
+</html>

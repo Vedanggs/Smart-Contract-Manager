@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
+>
+  <head>
+    <title data-th-text="${loggedInUser.name}+' |  Dashboard'">
+      Profile Page
+    </title>
+  </head>
+  <body>
+    <div id="content">
+      <!-- sidebar -->
+
+      <!-- user is logged in : sidebar -->
+
+      <div th:if="${loggedInUser}">
+        <div data-th-replace="~{user/sidebar :: sidebar}"></div>
+      </div>
+
+      <div class="sm:pl-64 pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div class="p-6">
+          <!-- Welcome Section -->
+          <div class="mb-8 text-center">
+            <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-2">
+              Welcome, <span data-th-text="${loggedInUser.name}">User</span>!
+            </h1>
+            <p class="text-xl text-gray-600 dark:text-gray-300">
+              How can I help you today?
+            </p>
+          </div>
+
+          <!-- Stats Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Total Contacts -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='/user/contacts'">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Total Contacts</p>
+                  <p class="text-3xl font-bold text-blue-600" data-th-text="${totalContacts}">0</p>
+                </div>
+                <div class="p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
+                  <i class="fa-regular fa-address-book text-2xl text-blue-600 dark:text-blue-300"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Favorite Contacts -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='/user/contacts'">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Favorites</p>
+                  <p class="text-3xl font-bold text-yellow-600" data-th-text="${favoriteContacts}">0</p>
+                </div>
+                <div class="p-3 bg-yellow-100 dark:bg-yellow-900 rounded-full">
+                  <i class="fa-solid fa-star text-2xl text-yellow-600 dark:text-yellow-300"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Additions -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='/user/contacts'">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Recent (7 days)</p>
+                  <p class="text-3xl font-bold text-green-600" data-th-text="${recentContacts}">0</p>
+                </div>
+                <div class="p-3 bg-green-100 dark:bg-green-900 rounded-full">
+                  <i class="fa-solid fa-clock text-2xl text-green-600 dark:text-green-300"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Quick Add</p>
+                  <p class="text-lg font-semibold text-purple-600">New Contact</p>
+                </div>
+                <a href="/user/contacts/add" class="p-3 bg-purple-100 dark:bg-purple-900 rounded-full hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors">
+                  <i class="fa-solid fa-plus text-2xl text-purple-600 dark:text-purple-300"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions Section -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Recent Contacts -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-gray-800 dark:text-white">Recent Contacts</h2>
+                <a href="/user/contacts" class="text-blue-600 hover:text-blue-800 text-sm">View All</a>
+              </div>
+              <div class="space-y-3" th:if="${recentContactList != null and !recentContactList.isEmpty()}">
+                <div th:each="contact : ${recentContactList}" class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors cursor-pointer" onclick="window.location.href='/user/contacts/view/' + this.getAttribute('data-contact-id')" th:data-contact-id="${contact.id}">
+                  <img th:src="${contact.picture != null ? contact.picture : 'https://ui-avatars.com/api/?name=' + contact.name + '&background=random'}" class="w-10 h-10 rounded-full mr-3" alt="Contact">
+                  <div class="flex-1">
+                    <p class="font-medium text-gray-800 dark:text-white" th:text="${contact.name}">Name</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${contact.email}">Email</p>
+                  </div>
+                  <i th:if="${contact.favorite}" class="fa-solid fa-star text-yellow-500"></i>
+                </div>
+              </div>
+              <div th:if="${recentContactList == null or recentContactList.isEmpty()}" class="text-center py-8 text-gray-500 dark:text-gray-400">
+                <i class="fa-regular fa-address-book text-4xl mb-2"></i>
+                <p>No contacts yet. <a href="/user/contacts/add" class="text-blue-600 hover:underline">Add your first contact</a></p>
+              </div>
+            </div>
+
+            <!-- Quick Actions Menu -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+              <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Quick Actions</h2>
+              <div class="grid grid-cols-2 gap-4">
+                <a href="/user/contacts/add" class="flex flex-col items-center p-4 bg-blue-50 dark:bg-blue-900 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-800 transition-colors">
+                  <i class="fa-solid fa-user-plus text-3xl text-blue-600 dark:text-blue-300 mb-2"></i>
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Add Contact</span>
+                </a>
+                <a href="/user/contacts" class="flex flex-col items-center p-4 bg-green-50 dark:bg-green-900 rounded-lg hover:bg-green-100 dark:hover:bg-green-800 transition-colors">
+                  <i class="fa-solid fa-list text-3xl text-green-600 dark:text-green-300 mb-2"></i>
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">View Contacts</span>
+                </a>
+                <a href="/user/profile" class="flex flex-col items-center p-4 bg-purple-50 dark:bg-purple-900 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-800 transition-colors">
+                  <i class="fa-solid fa-user-gear text-3xl text-purple-600 dark:text-purple-300 mb-2"></i>
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Edit Profile</span>
+                </a>
+                <a href="/user/contacts/search" class="flex flex-col items-center p-4 bg-orange-50 dark:bg-orange-900 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-800 transition-colors">
+                  <i class="fa-solid fa-magnifying-glass text-3xl text-orange-600 dark:text-orange-300 mb-2"></i>
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Search</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tips Section -->
+          <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-md p-6 text-white">
+            <h3 class="text-xl font-bold mb-2"><i class="fa-solid fa-lightbulb mr-2"></i>Pro Tip</h3>
+            <p>Keep your contacts organized by adding detailed information like phone numbers, email addresses, and social media links. You can also mark important contacts as favorites for quick access!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      console.log("this is profile page");
+    </script>
+  </body>
+</html>

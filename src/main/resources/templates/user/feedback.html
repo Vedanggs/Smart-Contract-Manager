@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
+>
+  <head>
+    <title data-th-text="${loggedInUser.name}+' |  Feedback'">
+      Feedback Page
+    </title>
+  </head>
+  <body>
+    <div id="content">
+      <!-- sidebar -->
+
+      <!-- user is logged in : sidebar -->
+
+      <div th:if="${loggedInUser}">
+        <div data-th-replace="~{user/sidebar :: sidebar}"></div>
+      </div>
+
+      <div class="sm:pl-64 pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div class="p-6">
+          <!-- Header Section -->
+          <div class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">
+              <i class="fa-solid fa-comments mr-2 text-purple-600"></i>Feedback
+            </h1>
+            <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              We value your opinion! Share your thoughts, report issues, or suggest improvements to help us make Smart Contact Manager better.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            <!-- Feedback Form -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+              <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-6">
+                <i class="fa-solid fa-pen-to-square mr-2 text-blue-600"></i>Send Feedback
+              </h2>
+              
+              <form id="feedbackForm" onsubmit="submitFeedback(event)">
+                <!-- Feedback Type -->
+                <div class="mb-4">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Feedback Type</label>
+                  <div class="grid grid-cols-2 gap-3">
+                    <label class="flex items-center p-3 border border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                      <input type="radio" name="feedbackType" value="suggestion" checked class="mr-3 text-blue-600">
+                      <span class="text-gray-700 dark:text-gray-300"><i class="fa-solid fa-lightbulb mr-2 text-yellow-500"></i>Suggestion</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                      <input type="radio" name="feedbackType" value="bug" class="mr-3 text-blue-600">
+                      <span class="text-gray-700 dark:text-gray-300"><i class="fa-solid fa-bug mr-2 text-red-500"></i>Bug Report</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                      <input type="radio" name="feedbackType" value="compliment" class="mr-3 text-blue-600">
+                      <span class="text-gray-700 dark:text-gray-300"><i class="fa-solid fa-heart mr-2 text-pink-500"></i>Compliment</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                      <input type="radio" name="feedbackType" value="other" class="mr-3 text-blue-600">
+                      <span class="text-gray-700 dark:text-gray-300"><i class="fa-solid fa-comment mr-2 text-gray-500"></i>Other</span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Subject -->
+                <div class="mb-4">
+                  <label for="feedbackSubject" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subject</label>
+                  <input type="text" 
+                         id="feedbackSubject" 
+                         name="subject"
+                         class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                         placeholder="Brief summary of your feedback..."
+                         required>
+                </div>
+
+                <!-- Feedback Message -->
+                <div class="mb-4">
+                  <label for="feedbackMessage" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Your Feedback</label>
+                  <textarea id="feedbackMessage" 
+                            name="message"
+                            rows="5"
+                            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white resize-none"
+                            placeholder="Please describe your feedback in detail..."
+                            required></textarea>
+                </div>
+
+                <!-- Rating -->
+                <div class="mb-6">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rate Your Experience</label>
+                  <div class="flex space-x-2">
+                    <button type="button" onclick="setRating(1)" class="rating-star text-2xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="1">
+                      <i class="fa-solid fa-star"></i>
+                    </button>
+                    <button type="button" onclick="setRating(2)" class="rating-star text-2xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="2">
+                      <i class="fa-solid fa-star"></i>
+                    </button>
+                    <button type="button" onclick="setRating(3)" class="rating-star text-2xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="3">
+                      <i class="fa-solid fa-star"></i>
+                    </button>
+                    <button type="button" onclick="setRating(4)" class="rating-star text-2xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="4">
+                      <i class="fa-solid fa-star"></i>
+                    </button>
+                    <button type="button" onclick="setRating(5)" class="rating-star text-2xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="5">
+                      <i class="fa-solid fa-star"></i>
+                    </button>
+                  </div>
+                  <input type="hidden" id="ratingValue" name="rating" value="0">
+                  <p id="ratingText" class="text-sm text-gray-500 mt-1">Click to rate</p>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" 
+                        class="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all flex items-center justify-center font-medium">
+                  <i class="fa-solid fa-paper-plane mr-2"></i>Submit Feedback
+                </button>
+              </form>
+            </div>
+
+            <!-- Info & FAQ Section -->
+            <div class="space-y-6">
+              <!-- Contact Info -->
+              <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">
+                  <i class="fa-solid fa-headset mr-2 text-green-600"></i>Need Help?
+                </h3>
+                <div class="space-y-3">
+                  <div class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mr-3">
+                      <i class="fa-solid fa-envelope text-blue-600 dark:text-blue-300"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500 dark:text-gray-400">Email Us</p>
+                      <p class="font-medium text-gray-800 dark:text-white">support@scm.com</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div class="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mr-3">
+                      <i class="fa-solid fa-phone text-green-600 dark:text-green-300"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500 dark:text-gray-400">Call Us</p>
+                      <p class="font-medium text-gray-800 dark:text-white">+1 (555) 123-4567</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mr-3">
+                      <i class="fa-solid fa-clock text-purple-600 dark:text-purple-300"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500 dark:text-gray-400">Working Hours</p>
+                      <p class="font-medium text-gray-800 dark:text-white">Mon - Fri, 9AM - 6PM</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- FAQ -->
+              <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">
+                  <i class="fa-solid fa-circle-question mr-2 text-orange-600"></i>Frequently Asked Questions
+                </h3>
+                <div class="space-y-3">
+                  <div class="border border-gray-200 dark:border-gray-600 rounded-lg">
+                    <button onclick="toggleFaq(this)" class="w-full px-4 py-3 text-left flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                      <span class="font-medium text-gray-800 dark:text-white">How do I add a new contact?</span>
+                      <i class="fa-solid fa-chevron-down text-gray-500 transition-transform"></i>
+                    </button>
+                    <div class="hidden px-4 py-3 text-gray-600 dark:text-gray-300 border-t border-gray-200 dark:border-gray-600">
+                      Go to the "Add Contact" page from the sidebar, fill in the contact details, and click "Save Contact".
+                    </div>
+                  </div>
+                  <div class="border border-gray-200 dark:border-gray-600 rounded-lg">
+                    <button onclick="toggleFaq(this)" class="w-full px-4 py-3 text-left flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                      <span class="font-medium text-gray-800 dark:text-white">Can I import contacts from a file?</span>
+                      <i class="fa-solid fa-chevron-down text-gray-500 transition-transform"></i>
+                    </button>
+                    <div class="hidden px-4 py-3 text-gray-600 dark:text-gray-300 border-t border-gray-200 dark:border-gray-600">
+                      Yes! Go to Contacts page and click on the "Import" button to upload a CSV or vCard file.
+                    </div>
+                  </div>
+                  <div class="border border-gray-200 dark:border-gray-600 rounded-lg">
+                    <button onclick="toggleFaq(this)" class="w-full px-4 py-3 text-left flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                      <span class="font-medium text-gray-800 dark:text-white">How do I mark a contact as favorite?</span>
+                      <i class="fa-solid fa-chevron-down text-gray-500 transition-transform"></i>
+                    </button>
+                    <div class="hidden px-4 py-3 text-gray-600 dark:text-gray-300 border-t border-gray-200 dark:border-gray-600">
+                      When adding or editing a contact, check the "Favorite" checkbox, or click the star icon on the contact card.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Links -->
+              <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-md p-6 text-white">
+                <h3 class="text-lg font-bold mb-3">
+                  <i class="fa-solid fa-rocket mr-2"></i>Explore More
+                </h3>
+                <div class="grid grid-cols-2 gap-3">
+                  <a href="/user/dashboard" class="flex items-center p-3 bg-white/20 rounded-lg hover:bg-white/30 transition-colors">
+                    <i class="fa-solid fa-gauge-high mr-2"></i>Dashboard
+                  </a>
+                  <a href="/user/contacts" class="flex items-center p-3 bg-white/20 rounded-lg hover:bg-white/30 transition-colors">
+                    <i class="fa-solid fa-address-book mr-2"></i>Contacts
+                  </a>
+                  <a href="/user/profile" class="flex items-center p-3 bg-white/20 rounded-lg hover:bg-white/30 transition-colors">
+                    <i class="fa-solid fa-user mr-2"></i>Profile
+                  </a>
+                  <a href="/user/direct-message" class="flex items-center p-3 bg-white/20 rounded-lg hover:bg-white/30 transition-colors">
+                    <i class="fa-solid fa-message mr-2"></i>Messages
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      console.log("Feedback page loaded");
+      
+      // Rating functionality
+      function setRating(rating) {
+        document.getElementById('ratingValue').value = rating;
+        
+        // Update star colors
+        document.querySelectorAll('.rating-star').forEach(star => {
+          const starRating = parseInt(star.getAttribute('data-rating'));
+          if (starRating <= rating) {
+            star.classList.remove('text-gray-300');
+            star.classList.add('text-yellow-400');
+          } else {
+            star.classList.remove('text-yellow-400');
+            star.classList.add('text-gray-300');
+          }
+        });
+        
+        // Update rating text
+        const ratingTexts = ['Click to rate', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+        document.getElementById('ratingText').textContent = ratingTexts[rating];
+      }
+      
+      // FAQ toggle functionality
+      function toggleFaq(button) {
+        const content = button.nextElementSibling;
+        const icon = button.querySelector('.fa-chevron-down');
+        
+        if (content.classList.contains('hidden')) {
+          content.classList.remove('hidden');
+          icon.style.transform = 'rotate(180deg)';
+        } else {
+          content.classList.add('hidden');
+          icon.style.transform = 'rotate(0deg)';
+        }
+      }
+      
+      // Submit feedback
+      function submitFeedback(event) {
+        event.preventDefault();
+        
+        const formData = new FormData(event.target);
+        const feedbackType = formData.get('feedbackType');
+        const subject = formData.get('subject');
+        const message = formData.get('message');
+        const rating = formData.get('rating');
+        
+        // Simulate submission
+        console.log('Feedback submitted:', { feedbackType, subject, message, rating });
+        
+        // Show success message
+        alert('Thank you for your feedback! We appreciate your input.');
+        
+        // Reset form
+        event.target.reset();
+        setRating(0);
+      }
+    </script>
+  </body>
+</html>
