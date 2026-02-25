@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: smart-contact-manager
+    runtime: docker
+    plan: free
+    envVars:
+      - key: EMAIL_HOST
+        value: smtp.gmail.com
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_USERNAME
+        value: test@example.com
+      - key: EMAIL_PASSWORD
+        value: testpassword
+      - key: EMAIL_DOMAIN
+        value: test@example.com
+      - key: CLOUDINARY_API_KEY
+        value: test
+      - key: CLOUDINARY_API_SECRET
+        value: test
+      - key: CLOUDINARY_NAME
+        value: test
+      - key: GOOGLE_CLIENT_ID
+        value: test
+      - key: GOOGLE_CLIENT_SECRET
+        value: test
+      - key: GITHUB_CLIENT_ID
+        value: test
+      - key: GITHUB_CLIENT_SECRET
+        value: test
+      - key: SPRING_PROFILES_ACTIVE
+        value: dev
+      - key: PORT
+        value: "8081"
+    healthCheckPath: /actuator/health
