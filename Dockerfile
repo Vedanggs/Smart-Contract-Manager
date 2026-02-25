@@ -1,10 +1,10 @@
-FROM openjdk:21
+FROM eclipse-temurin:21-jdk-alpine
 
 WORKDIR /app
 
-COPY dist/scm2.0-0.0.1-SNAPSHOT.jar /app/scm2.0-0.0.1-SNAPSHOT.jar
+COPY target/scm2.0-0.0.1-SNAPSHOT.jar app.jar
 
-EXPOSE 8080
+EXPOSE 8081
 
-ENTRYPOINT ["java", "-jar", "scm2.0-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
 
