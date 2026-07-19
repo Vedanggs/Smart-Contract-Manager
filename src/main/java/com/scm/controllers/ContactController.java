@@ -204,21 +204,32 @@ public class ContactController {
         return java.util.Map.of("favorite", contact.isFavorite());
     }
 
-    // detete contact
-    @RequestMapping("/delete/{contactId}")
+    // delete contact — POST only (CSRF-protected) + ownership check
+    @RequestMapping(value = "/delete/{contactId}", method = RequestMethod.POST)
     public String deleteContact(
             @PathVariable("contactId") String contactId,
+            Authentication authentication,
             HttpSession session) {
+
+        User user = userService.getUserByEmail(Helper.getEmailOfLoggedInUser(authentication));
+        Contact contact = contactService.getById(contactId);
+
+        // only the owner may delete their own contact
+        if (contact.getUser() == null || !contact.getUser().getUserId().equals(user.getUserId())) {
+            session.setAttribute("message", Message.builder()
+                    .content("You are not allowed to delete this contact.")
+                    .type(MessageType.red).build());
+            return "redirect:/user/contacts";
+        }
+
         contactService.delete(contactId);
         logger.info("contactId {} deleted", contactId);
 
         session.setAttribute("message",
                 Message.builder()
-                        .content("Contact is Deleted successfully !! ")
+                        .content("Contact deleted successfully.")
                         .type(MessageType.green)
-                        .build()
-
-        );
+                        .build());
 
         return "redirect:/user/contacts";
     }

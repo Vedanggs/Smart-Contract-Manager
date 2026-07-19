@@ -84,8 +84,20 @@ async function deleteContact(id) {
     cancelButtonColor: "#6b7280",
   }).then((result) => {
     if (result.isConfirmed) {
-      const url = `${baseURL}/user/contacts/delete/` + id;
-      window.location.replace(url);
+      // Submit a POST form (not a GET navigation) so the delete is CSRF-protected
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = `${baseURL}/user/contacts/delete/${id}`;
+      const tokenMeta = document.querySelector('meta[name="_csrf"]');
+      if (tokenMeta && tokenMeta.content) {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "_csrf";
+        input.value = tokenMeta.content;
+        form.appendChild(input);
+      }
+      document.body.appendChild(form);
+      form.submit();
     }
   });
 }
