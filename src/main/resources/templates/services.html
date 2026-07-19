@@ -1,17 +1,138 @@
 <!DOCTYPE html>
-<html lang="en" th:replace="~{base :: parent(~{::#content},~{::title},~{})}">
+<html
+  lang="en"
+  th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
+>
   <head>
-  
-    <title>
-      Services
-    </title>
+    <title>Services · SCM 2.0</title>
   </head>
   <body>
     <section id="content">
-      <h1>Welcome to services page</h1>
-      <h2>Services offered by SCM</h2>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas dolore assumenda rerum harum mollitia incidunt nesciunt dignissimos esse dicta reprehenderit quam, quisquam aspernatur enim consequatur accusamus, minima alias odit ducimus.<10></10>
-    </section>
+      <!-- Hero -->
+      <div class="bg-gradient-to-br from-emerald-600 to-teal-700 text-white">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-24 text-center">
+          <span
+            class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-white/15 backdrop-blur mb-4"
+            >What we offer</span
+          >
+          <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">
+            Everything you need to manage your contacts
+          </h1>
+          <p class="max-w-2xl mx-auto text-base sm:text-lg text-emerald-100">
+            From secure storage to instant search and direct messaging — SCM 2.0
+            packs a full contact toolkit into one clean dashboard.
+          </p>
+        </div>
+      </div>
 
+      <!-- Services grid -->
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="group rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 p-6 shadow-sm hover:shadow-lg transition">
+            <div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900 flex items-center justify-center mb-4">
+              <i class="fa-solid fa-address-card text-xl text-blue-600 dark:text-blue-300"></i>
+            </div>
+            <h3 class="font-semibold text-lg text-gray-900 dark:text-white mb-2">Contact management</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300">
+              Add, edit, and organize unlimited contacts with names, emails,
+              phone numbers, addresses, and social links.
+            </p>
+          </div>
+
+          <div class="group rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 p-6 shadow-sm hover:shadow-lg transition">
+            <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center mb-4">
+              <i class="fa-solid fa-cloud-arrow-up text-xl text-emerald-600 dark:text-emerald-300"></i>
+            </div>
+            <h3 class="font-semibold text-lg text-gray-900 dark:text-white mb-2">Cloud storage</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300">
+              Every contact is stored securely in the cloud and synced across all
+              your devices — never lose a number again.
+            </p>
+          </div>
+
+          <div class="group rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 p-6 shadow-sm hover:shadow-lg transition">
+            <div class="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-900 flex items-center justify-center mb-4">
+              <i class="fa-solid fa-magnifying-glass text-xl text-amber-600 dark:text-amber-300"></i>
+            </div>
+            <h3 class="font-semibold text-lg text-gray-900 dark:text-white mb-2">Smart search</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300">
+              Instantly filter your contacts by name, email, or phone number with
+              fast, paginated results.
+            </p>
+          </div>
+
+          <div class="group rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 p-6 shadow-sm hover:shadow-lg transition">
+            <div class="w-12 h-12 rounded-xl bg-rose-100 dark:bg-rose-900 flex items-center justify-center mb-4">
+              <i class="fa-solid fa-paper-plane text-xl text-rose-600 dark:text-rose-300"></i>
+            </div>
+            <h3 class="font-semibold text-lg text-gray-900 dark:text-white mb-2">Direct messaging</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300">
+              Send an email straight to any contact from your dashboard — no need
+              to switch to another app.
+            </p>
+          </div>
+
+          <div class="group rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 p-6 shadow-sm hover:shadow-lg transition">
+            <div class="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900 flex items-center justify-center mb-4">
+              <i class="fa-solid fa-star text-xl text-purple-600 dark:text-purple-300"></i>
+            </div>
+            <h3 class="font-semibold text-lg text-gray-900 dark:text-white mb-2">Favorites & tags</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300">
+              Mark important people as favorites for one-click access to the
+              contacts you reach out to most.
+            </p>
+          </div>
+
+          <div class="group rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 p-6 shadow-sm hover:shadow-lg transition">
+            <div class="w-12 h-12 rounded-xl bg-cyan-100 dark:bg-cyan-900 flex items-center justify-center mb-4">
+              <i class="fa-solid fa-file-export text-xl text-cyan-600 dark:text-cyan-300"></i>
+            </div>
+            <h3 class="font-semibold text-lg text-gray-900 dark:text-white mb-2">Export to Excel</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300">
+              Download your entire contact list as a spreadsheet whenever you need
+              a backup or report.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- How it works -->
+      <div class="bg-white dark:bg-gray-800/50">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+          <div class="text-center mb-12">
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">How it works</h2>
+            <p class="text-gray-500 dark:text-gray-400 mt-2">Get up and running in three simple steps.</p>
+          </div>
+          <div class="grid sm:grid-cols-3 gap-8">
+            <div class="text-center">
+              <div class="w-14 h-14 mx-auto rounded-full bg-blue-600 text-white flex items-center justify-center text-xl font-bold mb-4">1</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-1">Create an account</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-300">Sign up free with your email or Google in seconds.</p>
+            </div>
+            <div class="text-center">
+              <div class="w-14 h-14 mx-auto rounded-full bg-emerald-600 text-white flex items-center justify-center text-xl font-bold mb-4">2</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-1">Add your contacts</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-300">Store details, photos, and social links in one place.</p>
+            </div>
+            <div class="text-center">
+              <div class="w-14 h-14 mx-auto rounded-full bg-purple-600 text-white flex items-center justify-center text-xl font-bold mb-4">3</div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-1">Stay connected</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-300">Search, favorite, and message your network anytime.</p>
+            </div>
+          </div>
+          <div class="text-center mt-12">
+            <a
+              data-th-href="@{'/register'}"
+              class="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 transition"
+            >
+              <i class="fa-solid fa-rocket"></i> Start now — it's free
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script>
+      console.log("services page");
+    </script>
   </body>
 </html>

@@ -20,6 +20,7 @@ import com.scm.helpers.Helper;
 import com.scm.helpers.Message;
 import com.scm.helpers.MessageType;
 import com.scm.services.ContactService;
+import com.scm.services.EmailService;
 import com.scm.services.ImageService;
 import com.scm.services.UserService;
 
@@ -39,6 +40,12 @@ public class UserController {
 
     @Autowired
     private ImageService imageService;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private com.scm.repsitories.FeedbackRepo feedbackRepo;
 
     // user dashbaord page
 
@@ -94,28 +101,29 @@ public class UserController {
             @RequestParam("email") String email,
             @RequestParam("phoneNumber") String phoneNumber,
             @RequestParam("about") String about,
-            @RequestParam(value = "emailVerified", required = false, defaultValue = "false") boolean emailVerified,
-            @RequestParam(value = "phoneVerified", required = false, defaultValue = "false") boolean phoneVerified,
             @RequestParam(value = "profilePhoto", required = false) MultipartFile profilePhoto,
             Authentication authentication,
             HttpSession session) {
-        
+
         String username = Helper.getEmailOfLoggedInUser(authentication);
         User user = userService.getUserByEmail(username);
-        
-        // Check if email was changed - if so, reset verification
+
+        // Verification status is controlled by the system, never by the user.
+        // If the email/phone is changed, its existing verification is reset.
         boolean emailChanged = !email.equals(user.getEmail());
         boolean phoneChanged = !phoneNumber.equals(user.getPhoneNumber());
-        
+
         // Update user fields
         user.setEmail(email);
         user.setPhoneNumber(phoneNumber);
         user.setAbout(about);
-        
-        // Set verification status
-        // If email/phone was changed, it should be unverified unless explicitly verified
-        user.setEmailVerified(emailChanged ? false : emailVerified);
-        user.setPhoneVerified(phoneChanged ? false : phoneVerified);
+
+        if (emailChanged) {
+            user.setEmailVerified(false);
+        }
+        if (phoneChanged) {
+            user.setPhoneVerified(false);
+        }
         
         // Handle profile photo upload
         boolean photoUploaded = false;
@@ -184,10 +192,91 @@ public class UserController {
         return "user/direct_message";
     }
 
+    // Send a direct email to one of the user's contacts (AJAX)
+    @PostMapping("/direct-message/send")
+    @org.springframework.web.bind.annotation.ResponseBody
+    public org.springframework.http.ResponseEntity<java.util.Map<String, Object>> sendDirectMessage(
+            @RequestParam("contactId") String contactId,
+            @RequestParam("subject") String subject,
+            @RequestParam("message") String message,
+            Authentication authentication) {
+
+        User user = userService.getUserByEmail(Helper.getEmailOfLoggedInUser(authentication));
+
+        // find the contact and make sure it belongs to the logged-in user
+        Contact contact = contactService.getByUserId(user.getUserId()).stream()
+                .filter(c -> c.getId().equals(contactId))
+                .findFirst()
+                .orElse(null);
+
+        if (contact == null) {
+            return org.springframework.http.ResponseEntity.badRequest()
+                    .body(java.util.Map.of("success", false, "message", "Contact not found."));
+        }
+
+        if (contact.getEmail() == null || contact.getEmail().isBlank()) {
+            return org.springframework.http.ResponseEntity.badRequest()
+                    .body(java.util.Map.of("success", false,
+                            "message", "This contact has no email address on file."));
+        }
+
+        try {
+            String body = message + "\n\n— Sent via Smart Contact Manager by " + user.getName();
+            emailService.sendEmail(contact.getEmail(), subject, body);
+            return org.springframework.http.ResponseEntity.ok(java.util.Map.of(
+                    "success", true,
+                    "message", "Message sent to " + contact.getName() + " (" + contact.getEmail() + ")."));
+        } catch (Exception e) {
+            logger.error("Failed to send direct message: {}", e.getMessage());
+            return org.springframework.http.ResponseEntity
+                    .status(org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE)
+                    .body(java.util.Map.of("success", false,
+                            "message", "Could not send email. Please check the mail server configuration."));
+        }
+    }
+
     // Feedback page
     @RequestMapping(value = "/feedback")
     public String feedback() {
         return "user/feedback";
+    }
+
+    // Submit feedback (AJAX) — persists to the database
+    @PostMapping("/feedback/submit")
+    @org.springframework.web.bind.annotation.ResponseBody
+    public org.springframework.http.ResponseEntity<java.util.Map<String, Object>> submitFeedback(
+            @RequestParam(value = "feedbackType", defaultValue = "other") String feedbackType,
+            @RequestParam("subject") String subject,
+            @RequestParam("message") String message,
+            @RequestParam(value = "rating", defaultValue = "0") int rating,
+            Authentication authentication) {
+
+        if (subject == null || subject.isBlank() || message == null || message.isBlank()) {
+            return org.springframework.http.ResponseEntity.badRequest()
+                    .body(java.util.Map.of("success", false, "message", "Subject and message are required."));
+        }
+
+        try {
+            String email = Helper.getEmailOfLoggedInUser(authentication);
+            com.scm.entities.Feedback feedback = com.scm.entities.Feedback.builder()
+                    .userEmail(email)
+                    .type(feedbackType)
+                    .subject(subject.trim())
+                    .message(message.trim())
+                    .rating(rating)
+                    .createdAt(java.time.LocalDateTime.now())
+                    .build();
+            feedbackRepo.save(feedback);
+
+            return org.springframework.http.ResponseEntity.ok(java.util.Map.of(
+                    "success", true,
+                    "message", "Thank you for your feedback! We appreciate your input."));
+        } catch (Exception e) {
+            logger.error("Failed to save feedback: {}", e.getMessage());
+            return org.springframework.http.ResponseEntity
+                    .status(org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(java.util.Map.of("success", false, "message", "Could not save your feedback. Please try again."));
+        }
     }
 
 }

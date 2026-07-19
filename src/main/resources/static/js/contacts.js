@@ -1,6 +1,6 @@
 console.log("Contacts.js");
-// const baseURL = "http://localhost:8081";
-const baseURL = "https://www.scm20.site";
+// Use a relative base URL so the app works on any host (localhost, staging, prod)
+const baseURL = "";
 const viewContactModal = document.getElementById("view_contact_modal");
 
 // options with default values
@@ -72,15 +72,48 @@ async function loadContactdata(id) {
 
 async function deleteContact(id) {
   Swal.fire({
-    title: "Do you want to delete the contact?",
+    title: "Delete this contact?",
+    text: "This action cannot be undone.",
     icon: "warning",
     showCancelButton: true,
-    confirmButtonText: "Delete",
+    reverseButtons: true,
+    focusCancel: true,
+    confirmButtonText: "Yes, delete it",
+    cancelButtonText: "No, keep it",
+    confirmButtonColor: "#dc2626",
+    cancelButtonColor: "#6b7280",
   }).then((result) => {
-    /* Read more about isConfirmed, isDenied below */
     if (result.isConfirmed) {
       const url = `${baseURL}/user/contacts/delete/` + id;
       window.location.replace(url);
     }
   });
+}
+
+// Toggle a contact's favorite status without leaving the page
+async function toggleFavorite(id, btn) {
+  try {
+    const res = await fetch(`${baseURL}/user/contacts/favorite/${id}`, {
+      method: "POST",
+      headers: csrfHeaders({ "X-Requested-With": "XMLHttpRequest" }),
+    });
+    if (!res.ok) throw new Error("Request failed");
+    const data = await res.json();
+    const icon = btn.querySelector("i");
+    if (data.favorite) {
+      icon.classList.remove("fa-regular", "text-gray-400");
+      icon.classList.add("fa-solid", "text-yellow-400");
+      btn.title = "Remove from favorites";
+    } else {
+      icon.classList.remove("fa-solid", "text-yellow-400");
+      icon.classList.add("fa-regular", "text-gray-400");
+      btn.title = "Add to favorites";
+    }
+  } catch (e) {
+    Swal.fire({
+      icon: "error",
+      title: "Could not update favorite",
+      text: "Please try again.",
+    });
+  }
 }

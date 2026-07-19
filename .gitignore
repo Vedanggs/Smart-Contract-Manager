@@ -34,3 +34,20 @@ build/
 
 mysql_data/
 keyfile.txt
+
+### Secrets & local env ###
+.env
+.env.local
+run-local.ps1
+
+### Node / Tailwind build ###
+node_modules/
+
+### App runtime artifacts ###
+uploads/
+dist/
+*.log
+
+### OS ###
+.DS_Store
+Thumbs.db

@@ -183,6 +183,27 @@ public class ContactController {
         return "user/search";
     }
 
+    // toggle favorite status (AJAX)
+    @org.springframework.web.bind.annotation.PostMapping("/favorite/{contactId}")
+    @org.springframework.web.bind.annotation.ResponseBody
+    public java.util.Map<String, Object> toggleFavorite(
+            @PathVariable("contactId") String contactId,
+            Authentication authentication) {
+
+        User user = userService.getUserByEmail(Helper.getEmailOfLoggedInUser(authentication));
+        Contact contact = contactService.getById(contactId);
+
+        // only allow the owner to change their own contact
+        if (contact.getUser() == null || !contact.getUser().getUserId().equals(user.getUserId())) {
+            throw new com.scm.helpers.ResourceNotFoundException("Contact not found");
+        }
+
+        contact.setFavorite(!contact.isFavorite());
+        contactService.update(contact);
+
+        return java.util.Map.of("favorite", contact.isFavorite());
+    }
+
     // detete contact
     @RequestMapping("/delete/{contactId}")
     public String deleteContact(

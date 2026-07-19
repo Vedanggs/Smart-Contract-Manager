@@ -4,171 +4,133 @@
   th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
 >
   <head>
-    <title>Signup</title>
+    <title>Sign up · SCM 2.0</title>
   </head>
   <body>
     <div id="content">
-      <div class="grid grid-cols-12 mt-4">
-        <div class="col-span-4 md:col-span-2 lg:col-span-3 xl:col-span-4"></div>
-        <div class="col-span-12 md:col-span-8 lg:col-span-6 xl:col-span-4">
-          <!-- 6 ki spance le rhi hai -->
-          <!-- card -->
-          <div
-            class="block p-6 border-t-[10px] border-blue-700 bg-white rounded-xl shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-blue-700 dark:hover:bg-gray-700"
-          >
-            <!-- message here -->
+      <div class="min-h-[calc(100vh-72px)] flex items-center justify-center px-4 py-10 sm:py-16">
+        <div class="w-full max-w-lg">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl ring-1 ring-gray-100 dark:ring-gray-700 overflow-hidden">
+            <!-- accent bar -->
+            <div class="h-1.5 bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600"></div>
 
-            <div data-th-replace="message::messagebox"></div>
-
-            <h5
-              class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-            >
-              Signup Here
-            </h5>
-            <p class="font-normal text-gray-400 dark:text-gray-400">
-              Start managing contacts on cloud ...
-            </p>
-
-            <!-- this is  form -->
-            <form
-              data-th-action="@{'/do-register'}"
-              method="post"
-              data-th-object="${userForm}"
-              class="mt-5"
-              novalidate
-            >
-              <!-- name  -->
-
-              <div class="mb-3">
-                <label
-                  for="email"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >Name</label
-                >
-                <input
-                  type="text"
-                  id="name"
-                  data-th-field="*{name}"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Enter here"
-                  required
-                />
-
-                <p
-                  data-th-if="${#fields.hasErrors('name')}"
-                  data-th-errors="*{name}"
-                  class="text-red-600 px-1 py-2"
-                >
-                  Name is required
-                </p>
-              </div>
-              <!-- email field -->
-              <div class="mb-3">
-                <label
-                  for="email"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >Email</label
-                >
-                <input
-                  data-th-field="*{email}"
-                  type="email"
-                  id="email"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="name@flowbite.com"
-                  required
-                />
-                <p
-                  data-th-if="${#fields.hasErrors('email')}"
-                  data-th-errors="*{email}"
-                  class="text-red-600 px-1 py-2"
-                ></p>
-              </div>
-              <!-- password field -->
-              <div class="mb-3">
-                <label
-                  for="password"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >New Password</label
-                >
-                <input
-                  data-th-field="*{password}"
-                  type="password"
-                  id="password"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  required
-                />
-                <p
-                  data-th-if="${#fields.hasErrors('password')}"
-                  data-th-errors="*{password}"
-                  class="text-red-600 px-1 py-2"
-                ></p>
-              </div>
-              <!-- Phone field -->
-              <div class="mb-3">
-                <label
-                  for="phone"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >Contact Number</label
-                >
-                <input
-                  data-th-field="*{phoneNumber}"
-                  type="text"
-                  id="phone"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  required
-                />
-
-                <p
-                  data-th-if="${#fields.hasErrors('phoneNumber')}"
-                  data-th-errors="*{phoneNumber}"
-                  class="text-red-600 px-1 py-2"
-                ></p>
+            <div class="p-6 sm:p-8">
+              <!-- header -->
+              <div class="flex flex-col items-center text-center mb-6">
+                <div class="w-14 h-14 rounded-full bg-indigo-600/10 dark:bg-indigo-500/20 flex items-center justify-center mb-3">
+                  <i class="fa-solid fa-user-plus text-2xl text-indigo-600 dark:text-indigo-400"></i>
+                </div>
+                <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Create your account</h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Start managing your contacts on the cloud</p>
               </div>
 
-              <!-- about textarea -->
-              <div class="mb-3">
-                <label
-                  for="about"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >Write something about yourself</label
-                >
-                <textarea
-                  data-th-field="*{about}"
-                  id="about"
-                  rows="6"
-                  class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Write here..."
-                ></textarea>
+              <!-- message here -->
+              <div data-th-replace="message::messagebox"></div>
 
-                <p
-                  data-th-if="${#fields.hasErrors('about')}"
-                  data-th-errors="*{about}"
-                  class="text-red-600 px-1 py-2"
-                ></p>
-              </div>
-              <!-- button -->
+              <form data-th-action="@{'/do-register'}" method="post" data-th-object="${userForm}" class="space-y-4" novalidate>
+                <!-- name -->
+                <div>
+                  <label for="name" class="block mb-1.5 text-sm font-medium text-gray-700 dark:text-gray-200">Full name</label>
+                  <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 pointer-events-none">
+                      <i class="fa-regular fa-user"></i>
+                    </span>
+                    <input type="text" id="name" data-th-field="*{name}"
+                           class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white text-sm pl-10 pr-3 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                           placeholder="John Doe" required />
+                  </div>
+                  <p data-th-if="${#fields.hasErrors('name')}" data-th-errors="*{name}" class="text-red-600 text-sm mt-1"></p>
+                </div>
 
-              <div class="mb-3 flex justify-center space-x-3">
-                <button
-                  type="submit"
-                  class="px-3 py-2 rounded bg-gray-800 hover:bg-gray text-white dark:bg-blue-800 dark:hover:bg-blue-800"
-                >
-                  Singup
+                <!-- email -->
+                <div>
+                  <label for="email" class="block mb-1.5 text-sm font-medium text-gray-700 dark:text-gray-200">Email address</label>
+                  <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 pointer-events-none">
+                      <i class="fa-regular fa-envelope"></i>
+                    </span>
+                    <input type="email" id="email" data-th-field="*{email}"
+                           class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white text-sm pl-10 pr-3 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                           placeholder="you@example.com" required />
+                  </div>
+                  <p data-th-if="${#fields.hasErrors('email')}" data-th-errors="*{email}" class="text-red-600 text-sm mt-1"></p>
+                </div>
+
+                <!-- password -->
+                <div>
+                  <label for="password" class="block mb-1.5 text-sm font-medium text-gray-700 dark:text-gray-200">Password</label>
+                  <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 pointer-events-none">
+                      <i class="fa-solid fa-lock"></i>
+                    </span>
+                    <input type="password" id="password" data-th-field="*{password}"
+                           class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white text-sm pl-10 pr-10 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                           placeholder="At least 6 characters" required />
+                    <button type="button" id="togglePassword" aria-label="Show password"
+                            class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition">
+                      <i class="fa-regular fa-eye" id="togglePasswordIcon"></i>
+                    </button>
+                  </div>
+                  <p data-th-if="${#fields.hasErrors('password')}" data-th-errors="*{password}" class="text-red-600 text-sm mt-1"></p>
+                </div>
+
+                <!-- phone -->
+                <div>
+                  <label for="phone" class="block mb-1.5 text-sm font-medium text-gray-700 dark:text-gray-200">Contact number</label>
+                  <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 pointer-events-none">
+                      <i class="fa-solid fa-phone"></i>
+                    </span>
+                    <input type="text" id="phone" data-th-field="*{phoneNumber}"
+                           class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white text-sm pl-10 pr-3 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                           placeholder="9876543210" required />
+                  </div>
+                  <p data-th-if="${#fields.hasErrors('phoneNumber')}" data-th-errors="*{phoneNumber}" class="text-red-600 text-sm mt-1"></p>
+                </div>
+
+                <!-- about -->
+                <div>
+                  <label for="about" class="block mb-1.5 text-sm font-medium text-gray-700 dark:text-gray-200">About you</label>
+                  <textarea id="about" data-th-field="*{about}" rows="3"
+                            class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white text-sm px-3 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition resize-none"
+                            placeholder="Tell us a little about yourself..."></textarea>
+                  <p data-th-if="${#fields.hasErrors('about')}" data-th-errors="*{about}" class="text-red-600 text-sm mt-1"></p>
+                </div>
+
+                <!-- submit -->
+                <button type="submit"
+                        class="w-full flex items-center justify-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold text-sm px-4 py-2.5 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition">
+                  <i class="fa-solid fa-user-plus"></i> Create account
                 </button>
-                <button
-                  type="reset"
-                  class="px-3 py-2 rounded bg-orange-800 hover:bg-orange text-white dark:bg-orange-800 dark:hover:bg-orange-800"
-                >
-                  Reset
-                </button>
-              </div>
-            </form>
+              </form>
+
+              <p class="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
+                Already have an account?
+                <a data-th-href="@{'/login'}" class="font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300">Sign in</a>
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </div>
     <script>
       console.log("Signup page");
+
+      // Password show/hide toggle
+      (function () {
+        const toggle = document.getElementById("togglePassword");
+        const input = document.getElementById("password");
+        const icon = document.getElementById("togglePasswordIcon");
+        if (toggle && input) {
+          toggle.addEventListener("click", function () {
+            const isHidden = input.type === "password";
+            input.type = isHidden ? "text" : "password";
+            icon.classList.toggle("fa-eye", !isHidden);
+            icon.classList.toggle("fa-eye-slash", isHidden);
+            toggle.setAttribute("aria-label", isHidden ? "Hide password" : "Show password");
+          });
+        }
+      })();
     </script>
   </body>
 </html>

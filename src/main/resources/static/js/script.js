@@ -1,5 +1,17 @@
 console.log("Script loaded");
 
+// Build headers for state-changing fetch() calls, including the CSRF token
+// exposed via <meta> tags in base.html. Usage: fetch(url,{method:'POST',headers:csrfHeaders({...})})
+function csrfHeaders(extra) {
+  var headers = extra || {};
+  var token = document.querySelector('meta[name="_csrf"]');
+  var header = document.querySelector('meta[name="_csrf_header"]');
+  if (token && header && header.content) {
+    headers[header.content] = token.content;
+  }
+  return headers;
+}
+
 // change theme work
 let currentTheme = getTheme();
 //initial -->

@@ -4,146 +4,220 @@
   th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
 >
   <head>
-    <title data-th-text="${loggedInUser.name}+' |  Dashboard'">
-      Profile Page
-    </title>
+    <title data-th-text="${loggedInUser.name}+' · Dashboard'">Dashboard</title>
   </head>
   <body>
     <div id="content">
-      <!-- sidebar -->
-
-      <!-- user is logged in : sidebar -->
-
       <div th:if="${loggedInUser}">
         <div data-th-replace="~{user/sidebar :: sidebar}"></div>
       </div>
 
-      <div class="sm:pl-64 pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">
-        <div class="p-6">
-          <!-- Welcome Section -->
-          <div class="mb-8 text-center">
-            <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-2">
-              Welcome, <span data-th-text="${loggedInUser.name}">User</span>!
-            </h1>
-            <p class="text-xl text-gray-600 dark:text-gray-300">
-              How can I help you today?
-            </p>
-          </div>
+      <main class="sm:pl-64 pt-16 min-h-screen bg-gray-50 dark:bg-gray-950"
+            th:with="pc=${((loggedInUser.name != null and loggedInUser.name != '') ? 20 : 0) + ((loggedInUser.phoneNumber != null and loggedInUser.phoneNumber != '') ? 20 : 0) + ((loggedInUser.about != null and loggedInUser.about != '') ? 20 : 0) + ((loggedInUser.profilePic != null and loggedInUser.profilePic != '') ? 20 : 0) + (loggedInUser.emailVerified ? 20 : 0)}, storagePct=${totalContacts > 100 ? 100 : totalContacts}">
+        <div class="max-w-6xl mx-auto px-4 sm:px-8 py-8 space-y-6">
 
-          <!-- Stats Cards -->
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <!-- Total Contacts -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='/user/contacts'">
-              <div class="flex items-center justify-between">
+          <!-- Welcome banner -->
+          <section class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 to-indigo-700 dark:from-indigo-600 dark:to-indigo-800 text-white shadow-card">
+            <div class="absolute -right-10 -top-10 w-48 h-48 rounded-full bg-white/10"></div>
+            <div class="absolute -right-16 top-20 w-40 h-40 rounded-full bg-white/5"></div>
+            <div class="relative px-6 sm:px-8 py-7 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div class="flex items-center gap-4">
+                <img
+                  onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=User&background=ffffff&color=4F46E5&size=96'"
+                  data-th-src="${loggedInUser.profilePic != null and loggedInUser.profilePic != ''} ? @{${loggedInUser.profilePic}} : ('https://ui-avatars.com/api/?name=' + ${loggedInUser.name} + '&background=ffffff&color=4F46E5&size=96')"
+                  class="w-14 h-14 rounded-full object-cover ring-2 ring-white/40 shadow" alt="Profile" />
                 <div>
-                  <p class="text-sm text-gray-500 dark:text-gray-400">Total Contacts</p>
-                  <p class="text-3xl font-bold text-blue-600" data-th-text="${totalContacts}">0</p>
-                </div>
-                <div class="p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
-                  <i class="fa-regular fa-address-book text-2xl text-blue-600 dark:text-blue-300"></i>
-                </div>
-              </div>
-            </div>
-
-            <!-- Favorite Contacts -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='/user/contacts'">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-sm text-gray-500 dark:text-gray-400">Favorites</p>
-                  <p class="text-3xl font-bold text-yellow-600" data-th-text="${favoriteContacts}">0</p>
-                </div>
-                <div class="p-3 bg-yellow-100 dark:bg-yellow-900 rounded-full">
-                  <i class="fa-solid fa-star text-2xl text-yellow-600 dark:text-yellow-300"></i>
+                  <h1 class="text-xl sm:text-2xl font-bold">
+                    Welcome back, <span data-th-text="${loggedInUser.name}">User</span> 👋
+                  </h1>
+                  <p class="text-sm text-indigo-100 mt-0.5">Here's what's happening with your contacts today.</p>
                 </div>
               </div>
-            </div>
-
-            <!-- Recent Additions -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='/user/contacts'">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-sm text-gray-500 dark:text-gray-400">Recent (7 days)</p>
-                  <p class="text-3xl font-bold text-green-600" data-th-text="${recentContacts}">0</p>
-                </div>
-                <div class="p-3 bg-green-100 dark:bg-green-900 rounded-full">
-                  <i class="fa-solid fa-clock text-2xl text-green-600 dark:text-green-300"></i>
-                </div>
-              </div>
-            </div>
-
-            <!-- Quick Actions -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-sm text-gray-500 dark:text-gray-400">Quick Add</p>
-                  <p class="text-lg font-semibold text-purple-600">New Contact</p>
-                </div>
-                <a href="/user/contacts/add" class="p-3 bg-purple-100 dark:bg-purple-900 rounded-full hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors">
-                  <i class="fa-solid fa-plus text-2xl text-purple-600 dark:text-purple-300"></i>
+              <div class="flex items-center gap-3">
+                <a data-th-href="@{'/user/contacts/add'}"
+                   class="inline-flex items-center gap-2 rounded-lg bg-white text-indigo-700 text-sm font-semibold px-4 py-2.5 hover:bg-indigo-50 shadow-sm transition-all duration-300">
+                  <i class="fa-solid fa-plus"></i> Add contact
+                </a>
+                <a data-th-href="@{'/user/contacts'}"
+                   class="inline-flex items-center gap-2 rounded-lg bg-white/10 border border-white/30 text-white text-sm font-semibold px-4 py-2.5 hover:bg-white/20 transition-all duration-300">
+                  <i class="fa-regular fa-address-book"></i> View all
                 </a>
               </div>
             </div>
-          </div>
+          </section>
 
-          <!-- Quick Actions Section -->
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <!-- Recent Contacts -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-              <div class="flex items-center justify-between mb-4">
-                <h2 class="text-xl font-bold text-gray-800 dark:text-white">Recent Contacts</h2>
-                <a href="/user/contacts" class="text-blue-600 hover:text-blue-800 text-sm">View All</a>
+          <!-- Stat cards -->
+          <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="hover-lift bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5 shadow-card hover:shadow-card-hover">
+              <div class="flex items-center justify-between mb-3">
+                <span class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center"><i class="fa-regular fa-address-book text-indigo-600 dark:text-indigo-400"></i></span>
+                <i class="fa-solid fa-arrow-trend-up text-gray-300 dark:text-gray-600"></i>
               </div>
-              <div class="space-y-3" th:if="${recentContactList != null and !recentContactList.isEmpty()}">
-                <div th:each="contact : ${recentContactList}" class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors cursor-pointer" onclick="window.location.href='/user/contacts/view/' + this.getAttribute('data-contact-id')" th:data-contact-id="${contact.id}">
-                  <img th:src="${contact.picture != null ? contact.picture : 'https://ui-avatars.com/api/?name=' + contact.name + '&background=random'}" class="w-10 h-10 rounded-full mr-3" alt="Contact">
-                  <div class="flex-1">
-                    <p class="font-medium text-gray-800 dark:text-white" th:text="${contact.name}">Name</p>
-                    <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${contact.email}">Email</p>
-                  </div>
-                  <i th:if="${contact.favorite}" class="fa-solid fa-star text-yellow-500"></i>
+              <p class="text-3xl font-bold text-gray-900 dark:text-white" data-th-text="${totalContacts}">0</p>
+              <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mt-0.5">Total contacts</p>
+            </div>
+
+            <div class="hover-lift bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5 shadow-card hover:shadow-card-hover">
+              <div class="flex items-center justify-between mb-3">
+                <span class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center"><i class="fa-solid fa-star text-amber-500"></i></span>
+              </div>
+              <p class="text-3xl font-bold text-gray-900 dark:text-white" data-th-text="${favoriteContacts}">0</p>
+              <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mt-0.5">Favorites</p>
+            </div>
+
+            <div class="hover-lift bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5 shadow-card hover:shadow-card-hover">
+              <div class="flex items-center justify-between mb-3">
+                <span class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center"><i class="fa-regular fa-clock text-emerald-600 dark:text-emerald-400"></i></span>
+              </div>
+              <p class="text-3xl font-bold text-gray-900 dark:text-white" data-th-text="${recentContacts}">0</p>
+              <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mt-0.5">Recent (last 5)</p>
+            </div>
+
+            <div class="hover-lift bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5 shadow-card hover:shadow-card-hover">
+              <div class="flex items-center justify-between mb-3">
+                <span class="w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-500/10 flex items-center justify-center"><i class="fa-solid fa-circle-check text-violet-600 dark:text-violet-400"></i></span>
+              </div>
+              <p class="text-3xl font-bold text-gray-900 dark:text-white"><span data-th-text="${pc}">0</span>%</p>
+              <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mt-0.5">Profile complete</p>
+            </div>
+          </section>
+
+          <!-- Main grid -->
+          <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Recent contacts -->
+            <div class="lg:col-span-2 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-card">
+              <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-gray-800">
+                <h2 class="text-base font-semibold text-gray-900 dark:text-white">Recent contacts</h2>
+                <a data-th-href="@{'/user/contacts'}" class="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700">View all</a>
+              </div>
+              <ul th:if="${recentContactList != null and !recentContactList.isEmpty()}" class="divide-y divide-gray-100 dark:divide-gray-800">
+                <li th:each="contact : ${recentContactList}" class="flex items-center gap-4 px-5 py-3.5 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-300">
+                  <img
+                    th:src="${contact.picture != null and contact.picture != ''} ? ${contact.picture} : ('https://ui-avatars.com/api/?name=' + ${contact.name} + '&background=E0E7FF&color=4F46E5&size=64')"
+                    onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Contact&background=E0E7FF&color=4F46E5&size=64'"
+                    class="w-10 h-10 rounded-full object-cover" alt="Contact" />
+                  <a th:href="@{'/user/contacts/view/' + ${contact.id}}" class="flex-1 min-w-0">
+                    <p class="text-sm font-medium text-gray-900 dark:text-white truncate" th:text="${contact.name}">Name</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 truncate" th:text="${contact.email}">email</p>
+                  </a>
+                  <button type="button" th:data-id="${contact.id}"
+                          th:title="${contact.favorite} ? 'Remove from favorites' : 'Add to favorites'"
+                          class="fav-toggle p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300">
+                    <i th:classappend="${contact.favorite} ? 'fa-solid text-amber-400' : 'fa-regular text-gray-400'" class="fa-star"></i>
+                  </button>
+                </li>
+              </ul>
+              <div th:if="${recentContactList == null or recentContactList.isEmpty()}" class="px-5 py-14 text-center">
+                <div class="w-14 h-14 mx-auto rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-3">
+                  <i class="fa-regular fa-address-book text-2xl text-gray-400"></i>
+                </div>
+                <p class="text-sm font-medium text-gray-700 dark:text-gray-200">No contacts yet</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 mb-3">Start building your address book.</p>
+                <a data-th-href="@{'/user/contacts/add'}" class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 transition-all duration-300"><i class="fa-solid fa-plus"></i> Add your first contact</a>
+              </div>
+            </div>
+
+            <!-- Right column -->
+            <div class="space-y-6">
+              <!-- Quick actions -->
+              <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-card p-5">
+                <h2 class="text-base font-semibold text-gray-900 dark:text-white mb-4">Quick actions</h2>
+                <div class="grid grid-cols-2 gap-3">
+                  <a data-th-href="@{'/user/contacts/add'}" class="hover-lift flex flex-col items-center justify-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 py-4 hover:border-indigo-300 dark:hover:border-indigo-500/40 hover:bg-indigo-50/50 dark:hover:bg-indigo-500/5">
+                    <span class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center"><i class="fa-solid fa-user-plus text-indigo-600 dark:text-indigo-400"></i></span>
+                    <span class="text-xs font-medium text-gray-700 dark:text-gray-300">Add</span>
+                  </a>
+                  <a data-th-href="@{'/user/contacts'}" class="hover-lift flex flex-col items-center justify-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 py-4 hover:border-indigo-300 dark:hover:border-indigo-500/40 hover:bg-indigo-50/50 dark:hover:bg-indigo-500/5">
+                    <span class="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center"><i class="fa-solid fa-magnifying-glass text-emerald-600 dark:text-emerald-400"></i></span>
+                    <span class="text-xs font-medium text-gray-700 dark:text-gray-300">Search</span>
+                  </a>
+                  <a data-th-href="@{'/user/direct-message'}" class="hover-lift flex flex-col items-center justify-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 py-4 hover:border-indigo-300 dark:hover:border-indigo-500/40 hover:bg-indigo-50/50 dark:hover:bg-indigo-500/5">
+                    <span class="w-9 h-9 rounded-lg bg-violet-50 dark:bg-violet-500/10 flex items-center justify-center"><i class="fa-regular fa-paper-plane text-violet-600 dark:text-violet-400"></i></span>
+                    <span class="text-xs font-medium text-gray-700 dark:text-gray-300">Message</span>
+                  </a>
+                  <a data-th-href="@{'/user/profile'}" class="hover-lift flex flex-col items-center justify-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 py-4 hover:border-indigo-300 dark:hover:border-indigo-500/40 hover:bg-indigo-50/50 dark:hover:bg-indigo-500/5">
+                    <span class="w-9 h-9 rounded-lg bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center"><i class="fa-regular fa-user text-amber-600 dark:text-amber-400"></i></span>
+                    <span class="text-xs font-medium text-gray-700 dark:text-gray-300">Profile</span>
+                  </a>
                 </div>
               </div>
-              <div th:if="${recentContactList == null or recentContactList.isEmpty()}" class="text-center py-8 text-gray-500 dark:text-gray-400">
-                <i class="fa-regular fa-address-book text-4xl mb-2"></i>
-                <p>No contacts yet. <a href="/user/contacts/add" class="text-blue-600 hover:underline">Add your first contact</a></p>
+
+              <!-- Profile completion -->
+              <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-card p-5">
+                <div class="flex items-center justify-between mb-3">
+                  <h2 class="text-base font-semibold text-gray-900 dark:text-white">Profile completion</h2>
+                  <span class="text-sm font-bold text-indigo-600 dark:text-indigo-400"><span data-th-text="${pc}">0</span>%</span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden mb-4">
+                  <div class="h-full rounded-full bg-indigo-600 transition-all duration-500" th:style="'width:' + ${pc} + '%'"></div>
+                </div>
+                <ul class="space-y-2 text-sm">
+                  <li class="flex items-center gap-2">
+                    <i th:classappend="${loggedInUser.profilePic != null and loggedInUser.profilePic != ''} ? 'fa-circle-check text-emerald-500' : 'fa-circle text-gray-300 dark:text-gray-600'" class="fa-solid"></i>
+                    <span class="text-gray-600 dark:text-gray-300">Add a profile photo</span>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <i th:classappend="${loggedInUser.phoneNumber != null and loggedInUser.phoneNumber != ''} ? 'fa-circle-check text-emerald-500' : 'fa-circle text-gray-300 dark:text-gray-600'" class="fa-solid"></i>
+                    <span class="text-gray-600 dark:text-gray-300">Add a phone number</span>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <i th:classappend="${loggedInUser.about != null and loggedInUser.about != ''} ? 'fa-circle-check text-emerald-500' : 'fa-circle text-gray-300 dark:text-gray-600'" class="fa-solid"></i>
+                    <span class="text-gray-600 dark:text-gray-300">Write an about section</span>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <i th:classappend="${loggedInUser.emailVerified} ? 'fa-circle-check text-emerald-500' : 'fa-circle text-gray-300 dark:text-gray-600'" class="fa-solid"></i>
+                    <span class="text-gray-600 dark:text-gray-300">Verify your email</span>
+                  </li>
+                </ul>
+                <a data-th-href="@{'/user/profile'}" class="mt-4 inline-block text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline">Complete profile →</a>
+              </div>
+
+              <!-- Storage usage -->
+              <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-card p-5">
+                <div class="flex items-center justify-between mb-3">
+                  <h2 class="text-base font-semibold text-gray-900 dark:text-white">Storage</h2>
+                  <span class="w-8 h-8 rounded-lg bg-sky-50 dark:bg-sky-500/10 flex items-center justify-center"><i class="fa-solid fa-database text-sky-600 dark:text-sky-400 text-sm"></i></span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden mb-2">
+                  <div class="h-full rounded-full bg-sky-500 transition-all duration-500" th:style="'width:' + ${storagePct} + '%'"></div>
+                </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400">
+                  <span class="font-semibold text-gray-700 dark:text-gray-200" data-th-text="${totalContacts}">0</span> of 100 contacts used on your free plan.
+                </p>
               </div>
             </div>
-
-            <!-- Quick Actions Menu -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-              <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Quick Actions</h2>
-              <div class="grid grid-cols-2 gap-4">
-                <a href="/user/contacts/add" class="flex flex-col items-center p-4 bg-blue-50 dark:bg-blue-900 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-800 transition-colors">
-                  <i class="fa-solid fa-user-plus text-3xl text-blue-600 dark:text-blue-300 mb-2"></i>
-                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Add Contact</span>
-                </a>
-                <a href="/user/contacts" class="flex flex-col items-center p-4 bg-green-50 dark:bg-green-900 rounded-lg hover:bg-green-100 dark:hover:bg-green-800 transition-colors">
-                  <i class="fa-solid fa-list text-3xl text-green-600 dark:text-green-300 mb-2"></i>
-                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">View Contacts</span>
-                </a>
-                <a href="/user/profile" class="flex flex-col items-center p-4 bg-purple-50 dark:bg-purple-900 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-800 transition-colors">
-                  <i class="fa-solid fa-user-gear text-3xl text-purple-600 dark:text-purple-300 mb-2"></i>
-                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Edit Profile</span>
-                </a>
-                <a href="/user/contacts/search" class="flex flex-col items-center p-4 bg-orange-50 dark:bg-orange-900 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-800 transition-colors">
-                  <i class="fa-solid fa-magnifying-glass text-3xl text-orange-600 dark:text-orange-300 mb-2"></i>
-                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Search</span>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Tips Section -->
-          <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-md p-6 text-white">
-            <h3 class="text-xl font-bold mb-2"><i class="fa-solid fa-lightbulb mr-2"></i>Pro Tip</h3>
-            <p>Keep your contacts organized by adding detailed information like phone numbers, email addresses, and social media links. You can also mark important contacts as favorites for quick access!</p>
-          </div>
+          </section>
         </div>
-      </div>
+      </main>
     </div>
 
     <script>
-      console.log("this is profile page");
+      // Favorite toggle on the recent-contacts list
+      document.querySelectorAll(".fav-toggle").forEach(function (btn) {
+        btn.addEventListener("click", async function () {
+          var id = btn.getAttribute("data-id");
+          var icon = btn.querySelector("i");
+          try {
+            var res = await fetch("/user/contacts/favorite/" + id, {
+              method: "POST",
+              headers: csrfHeaders({ "X-Requested-With": "XMLHttpRequest" }),
+            });
+            if (!res.ok) throw new Error();
+            var data = await res.json();
+            if (data.favorite) {
+              icon.classList.remove("fa-regular", "text-gray-400");
+              icon.classList.add("fa-solid", "text-amber-400");
+              btn.title = "Remove from favorites";
+            } else {
+              icon.classList.remove("fa-solid", "text-amber-400");
+              icon.classList.add("fa-regular", "text-gray-400");
+              btn.title = "Add to favorites";
+            }
+          } catch (e) {
+            if (window.Swal) Swal.fire({ icon: "error", title: "Could not update favorite" });
+          }
+        });
+      });
     </script>
   </body>
 </html>

@@ -52,19 +52,14 @@ public class UserServiceImpl implements UserService {
         logger.info(user.getProvider().toString());
         String emailToken = UUID.randomUUID().toString();
         user.setEmailToken(emailToken);
-        
-        // For local testing, auto-verify email and enable user
-        user.setEmailVerified(true);
-        user.setEnabled(true);
-        
-        User savedUser = userRepo.save(user);
-        
-        // Skip email sending for local development
-        // String emailLink = helper.getLinkForEmailVerificatiton(emailToken);
-        // emailService.sendEmail(savedUser.getEmail(), "Verify Account : Smart  Contact Manager", emailLink);
-        
-        return savedUser;
 
+        // Account stays unverified and disabled until the user clicks the
+        // verification link we email them. The email is sent by the caller
+        // (PageController) so it can handle delivery failures gracefully.
+        user.setEmailVerified(false);
+        user.setEnabled(false);
+
+        return userRepo.save(user);
     }
 
     @Override

@@ -70,6 +70,9 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(authorize -> {
             // authorize.requestMatchers("/home", "/register", "/services").permitAll();
             authorize.requestMatchers("/user/**").authenticated();
+            // API is per-user data — require authentication (ownership is
+            // enforced in the controller to prevent reading others' contacts)
+            authorize.requestMatchers("/api/**").authenticated();
             authorize.anyRequest().permitAll();
         });
 
@@ -81,7 +84,7 @@ public class SecurityConfig {
             //
             formLogin.loginPage("/login");
             formLogin.loginProcessingUrl("/authenticate");
-            formLogin.successForwardUrl("/user/profile");
+            formLogin.defaultSuccessUrl("/user/dashboard", true);
             // formLogin.failureForwardUrl("/login?error=true");
             // formLogin.defaultSuccessUrl("/home");
             formLogin.usernameParameter("email");
@@ -116,7 +119,10 @@ public class SecurityConfig {
 
         });
 
-        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        // CSRF protection is ON (Spring Security default). Forms rendered with
+        // th:action get the token automatically; AJAX calls send it via header
+        // (see the _csrf meta tags in base.html + csrfHeaders() in script.js).
+
         // oauth configurations
 
         httpSecurity.oauth2Login(oauth -> {
@@ -125,7 +131,10 @@ public class SecurityConfig {
         });
 
         httpSecurity.logout(logoutForm -> {
-            logoutForm.logoutUrl("/do-logout");
+            // Allow GET logout (the sidebar/navbar use a link, not a form) even
+            // with CSRF enabled — GET is not a CSRF-protected method.
+            logoutForm.logoutRequestMatcher(
+                    new org.springframework.security.web.util.matcher.AntPathRequestMatcher("/do-logout"));
             logoutForm.logoutSuccessUrl("/login?logout=true");
         });
 

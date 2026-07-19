@@ -4,21 +4,171 @@
   th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
 >
   <head>
-    <title>About Page</title>
+    <title>About · SCM 2.0</title>
   </head>
   <body>
     <div id="content">
-      <h1>Welcome to about page</h1>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur,
-        ratione!
-      </p>
+      <!-- Hero -->
+      <section
+        class="relative overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-700 text-white"
+      >
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-24 text-center">
+          <span
+            class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-white/15 backdrop-blur mb-4"
+            >About Smart Contact Manager</span
+          >
+          <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">
+            Your contacts, organized and always within reach
+          </h1>
+          <p class="max-w-2xl mx-auto text-base sm:text-lg text-blue-100">
+            SCM 2.0 is a secure, cloud-based platform that helps you store,
+            manage, and connect with the people who matter — from any device,
+            anytime.
+          </p>
+        </div>
+      </section>
+
+      <!-- Mission -->
+      <section class="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+        <div class="grid md:grid-cols-2 gap-10 items-center">
+          <div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              Our mission
+            </h2>
+            <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+              We believe managing your network shouldn't be scattered across
+              phones, notebooks, and inboxes. SCM 2.0 brings every contact into
+              one clean, searchable place — backed by the cloud so you never
+              lose an important connection again.
+            </p>
+            <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+              Whether you're a student, a freelancer, or a growing business, our
+              goal is to make staying in touch effortless, private, and
+              beautifully simple.
+            </p>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="rounded-2xl bg-blue-50 dark:bg-gray-800 p-6 text-center">
+              <p class="text-3xl font-extrabold text-blue-600 dark:text-blue-400">100%</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Cloud backed</p>
+            </div>
+            <div class="rounded-2xl bg-emerald-50 dark:bg-gray-800 p-6 text-center">
+              <p class="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">24/7</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Access anywhere</p>
+            </div>
+            <div class="rounded-2xl bg-amber-50 dark:bg-gray-800 p-6 text-center">
+              <p class="text-3xl font-extrabold text-amber-600 dark:text-amber-400">Secure</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Encrypted logins</p>
+            </div>
+            <div class="rounded-2xl bg-purple-50 dark:bg-gray-800 p-6 text-center">
+              <p class="text-3xl font-extrabold text-purple-600 dark:text-purple-400">Free</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">To get started</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Why choose us -->
+      <section class="bg-white dark:bg-gray-800/50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+          <div class="text-center mb-12">
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+              Why people choose SCM 2.0
+            </h2>
+            <p class="text-gray-500 dark:text-gray-400 mt-2">
+              Everything you need to keep your network in order.
+            </p>
+          </div>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="rounded-2xl border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-6">
+              <div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900 flex items-center justify-center mb-4">
+                <i class="fa-solid fa-cloud text-xl text-blue-600 dark:text-blue-300"></i>
+              </div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Cloud storage</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-300">
+                Your contacts are safely stored and synced, ready on any device.
+              </p>
+            </div>
+            <div class="rounded-2xl border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-6">
+              <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center mb-4">
+                <i class="fa-solid fa-shield-halved text-xl text-emerald-600 dark:text-emerald-300"></i>
+              </div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Secure access</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-300">
+                Sign in with email or Google. Your data stays private to you.
+              </p>
+            </div>
+            <div class="rounded-2xl border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-6">
+              <div class="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-900 flex items-center justify-center mb-4">
+                <i class="fa-solid fa-magnifying-glass text-xl text-amber-600 dark:text-amber-300"></i>
+              </div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Powerful search</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-300">
+                Find anyone instantly by name, email, or phone number.
+              </p>
+            </div>
+            <div class="rounded-2xl border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-6">
+              <div class="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900 flex items-center justify-center mb-4">
+                <i class="fa-solid fa-star text-xl text-purple-600 dark:text-purple-300"></i>
+              </div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Favorites</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-300">
+                Mark your most important contacts for one-tap access.
+              </p>
+            </div>
+            <div class="rounded-2xl border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-6">
+              <div class="w-12 h-12 rounded-xl bg-rose-100 dark:bg-rose-900 flex items-center justify-center mb-4">
+                <i class="fa-solid fa-paper-plane text-xl text-rose-600 dark:text-rose-300"></i>
+              </div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Direct messaging</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-300">
+                Email your contacts straight from your dashboard.
+              </p>
+            </div>
+            <div class="rounded-2xl border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-6">
+              <div class="w-12 h-12 rounded-xl bg-cyan-100 dark:bg-cyan-900 flex items-center justify-center mb-4">
+                <i class="fa-solid fa-file-export text-xl text-cyan-600 dark:text-cyan-300"></i>
+              </div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Export anytime</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-300">
+                Download your contact list to Excel with a single click.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+        <div
+          class="rounded-3xl bg-gradient-to-r from-blue-600 to-indigo-700 px-6 py-12 sm:px-12 text-center text-white shadow-xl"
+        >
+          <h2 class="text-2xl sm:text-3xl font-bold mb-3">
+            Ready to organize your contacts?
+          </h2>
+          <p class="text-blue-100 mb-6 max-w-xl mx-auto">
+            Create a free account and start managing your network on the cloud
+            in minutes.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <a
+              data-th-href="@{'/register'}"
+              class="inline-flex items-center justify-center gap-2 rounded-lg bg-white text-blue-700 font-semibold px-6 py-3 hover:bg-blue-50 transition"
+            >
+              <i class="fa-solid fa-user-plus"></i> Get started free
+            </a>
+            <a
+              data-th-href="@{'/login'}"
+              class="inline-flex items-center justify-center gap-2 rounded-lg bg-white/10 border border-white/40 text-white font-semibold px-6 py-3 hover:bg-white/20 transition"
+            >
+              <i class="fa-solid fa-right-to-bracket"></i> Sign in
+            </a>
+          </div>
+        </div>
+      </section>
     </div>
     <script>
       console.log("about page");
-    </script>
-    <script>
-      console.log("second about page script");
     </script>
   </body>
 </html>
