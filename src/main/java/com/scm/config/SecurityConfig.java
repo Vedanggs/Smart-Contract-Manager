@@ -43,9 +43,6 @@ public class SecurityConfig {
     private SecurityCustomUserDetailService userDetailService;
 
     @Autowired
-    private OAuthAuthenicationSuccessHandler handler;
-
-    @Autowired
     private AuthFailtureHandler authFailtureHandler;
 
     // configuraiton of authentication providerfor spring security
@@ -122,13 +119,6 @@ public class SecurityConfig {
         // CSRF protection is ON (Spring Security default). Forms rendered with
         // th:action get the token automatically; AJAX calls send it via header
         // (see the _csrf meta tags in base.html + csrfHeaders() in script.js).
-
-        // oauth configurations
-
-        httpSecurity.oauth2Login(oauth -> {
-            oauth.loginPage("/login");
-            oauth.successHandler(handler);
-        });
 
         httpSecurity.logout(logoutForm -> {
             // Allow GET logout (the sidebar/navbar use a link, not a form) even
