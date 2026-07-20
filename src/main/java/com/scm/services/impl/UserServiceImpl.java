@@ -50,14 +50,11 @@ public class UserServiceImpl implements UserService {
         user.setRoleList(List.of(AppConstants.ROLE_USER));
 
         logger.info(user.getProvider().toString());
-        String emailToken = UUID.randomUUID().toString();
-        user.setEmailToken(emailToken);
+        user.setEmailToken(UUID.randomUUID().toString());
 
-        // Account stays unverified and disabled until the user clicks the
-        // verification link we email them. The email is sent by the caller
-        // (PageController) so it can handle delivery failures gracefully.
-        user.setEmailVerified(false);
-        user.setEnabled(false);
+        // No email verification: activate the account immediately.
+        user.setEmailVerified(true);
+        user.setEnabled(true);
 
         return userRepo.save(user);
     }
